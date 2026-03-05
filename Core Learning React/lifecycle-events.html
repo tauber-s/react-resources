@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lifecycle Events</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    class LifecycleEvents extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { count: 0, derivedValue: props.start };
+      };
+
+      static getDerivedStateFromProps(props, state) {
+        console.log("getDerivedStateFromProps");
+
+        if (props.start !== state.derivedValue)
+          return { derivedValue: props.start };
+        return null;
+      };
+
+      componentDidMount() {
+        console.log("componentDidMount");
+      };
+
+      shouldComponentUpdate(nextProps, nextState) {
+        console.log("shouldComponentUpdate");
+        return true;
+      };
+
+      componentDidUpdate(prevProps, prevState) {
+        console.log("componentDidUpdate");
+        console.log("=> prevState:", prevState);
+        console.log("=> currentState:", this.state);
+      };
+
+      componentWillUnmount() {
+        console.log("componentWillUnmount");
+      };
+
+      increment = () => {
+        this.setState({ count: this.state.count + 1 });
+      };
+
+      render() {
+        return (
+          <div style={{ border: "1px solid gray", padding: "20px", margin: "20px" }}>
+            <p>Prop start: {this.props.start}</p>
+            <p>Derived: {this.state.derivedValue}</p>
+            <p>Count: {this.state.count}</p>
+            <button onClick={this.increment}> Increment </button>
+          </div>
+        );
+      };
+    };
+
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { show: true, start: 10 };
+      };
+
+      toggle = () => {
+        this.setState({ show: !this.state.show });
+      };
+
+      changeProp = () => {
+        this.setState({ start: Math.floor(Math.random() * 100) });
+      };
+
+      render() {
+        return (
+          <div>
+            <h1>Lifecycle Events</h1>
+            <button onClick={this.toggle}> Mount / Unmount </button>
+            <button onClick={this.changeProp}> Change Prop </button>
+
+            {this.state.show && (<LifecycleEvents start={this.state.start} />)}
+          </div>
+        );
+      };
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+
+  </script>
+</body>
+</html>
