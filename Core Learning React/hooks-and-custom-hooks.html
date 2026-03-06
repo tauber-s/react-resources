@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hooks and custom hooks</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<style>
+  body { font-family: Arial; padding: 20px }
+  .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px }
+</style>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const {
+      useState,
+      useEffect,
+      useRef,
+      useMemo,
+      useCallback,
+      createContext,
+      useContext
+    } = React;
+
+    const useLocalStorage = (key, initialValue) => {
+      const [value, setValue] = useState(() => {
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : initialValue;
+      });
+
+      useEffect(() => {
+        localStorage.setItem(key, JSON.stringify(value));
+      }, [key, value]);
+
+      return [value, setValue];
+    };
+
+    const ThemeContext = createContext();
+    const ThemeProvider = ({ children }) => {
+      const [dark, setDark] = useLocalStorage("dark-mode", false);
+      const toggleTheme = () => setDark(v => !v);
+      return (
+        <ThemeContext.Provider value={{ dark, toggleTheme }}>
+          <div style={{
+            background: dark ? "#222" : "#fff",
+            color: dark ? "#fff" : "#000",
+            padding: 20
+          }}>
+            {children}
+          </div>
+        </ThemeContext.Provider>
+      );
+    };
+
+    const Counter = () => {
+      const [count, setCount] = useState(0);
+      return (
+        <div className="box">
+          <h3>useState</h3>
+          <p>{count}</p>
+          <button onClick={() => setCount(c => c + 1)}> Increment </button>
+        </div>
+      );
+    };
+
+    const Clock = () => {
+      const [time, setTime] = useState(new Date());
+      useEffect(() => {
+        const timer = setInterval(() => {
+          setTime(new Date());
+        }, 1000);
+        return () => clearInterval(timer);
+      }, []);
+      return (
+        <div className="box">
+          <h3>useEffect</h3>
+          <p>{time.toLocaleTimeString()}</p>
+        </div>
+      );
+    };
+
+    const InputFocus = () => {
+      const inputRef = useRef();
+      const focusInput = () => {
+        inputRef.current.focus();
+      };
+      return (
+        <div className="box">
+          <h3>useRef</h3>
+          <input ref={inputRef} />
+          <button onClick={focusInput}> Focus </button>
+        </div>
+      );
+    };
+
+    const Calc = ({ num }) => {
+      const result = useMemo(() => {
+        let total = 0;
+        for (let i = 0; i < 50000000; i++) {
+          total += num;
+        };
+        return total;
+      }, [num]);
+      return <p>Result: {result}</p>;
+    };
+
+    const MemoDemo = () => {
+      const [num, setNum] = useState(1);
+      const [flag, setFlag] = useState(false);
+      return (
+        <div className="box">
+          <h3>useMemo</h3>
+          <button onClick={() => setNum(n => n + 1)}> Change </button>
+          <button onClick={() => setFlag(f => !f)}> re-render </button>
+          <Calc num={num} />
+        </div>
+      );
+    };
+
+    const ThemeButton = () => {
+      const { dark, toggleTheme } = useContext(ThemeContext);
+      return (
+        <div className="box">
+          <h3>useContext</h3>
+          <p>Theme: {dark ? "Dark" : "Light"}</p>
+          <button onClick={toggleTheme}> Toggle </button>
+        </div>
+      );
+    };
+
+    const NameStorage = () => {
+      const [name, setName] = useLocalStorage("name", "");
+      return (
+        <div className="box">
+          <h3>Custom Hook (useLocalStorage)</h3>
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Type your name"
+          />
+          <p>Save: {name}</p>
+        </div>
+      );
+    };
+
+    const App = () =>{
+      return (
+        <ThemeProvider>
+          <h1>React Hooks and custom hooks</h1>
+          <Counter />
+          <Clock />
+          <InputFocus />
+          <MemoDemo />
+          <ThemeButton />
+          <NameStorage />
+        </ThemeProvider>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+
+  </script>
+</body>
+</html>
