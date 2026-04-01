@@ -9,34 +9,88 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 
-<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#6366f1",
+            secondary: "#a855f7",
+          },
+          boxShadow: {
+            glow: "0 0 25px rgba(99,102,241,0.6)",
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center min-h-screen">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState } = React;
+    const Button = ({ children, onClick, variant = "primary" }) => {
+      const base = "px-4 py-2 rounded-xl font-medium transition-all duration-300 active:scale-95";
+      const variants = {
+        primary:
+          "bg-primary hover:bg-indigo-500 text-white shadow-lg hover:shadow-glow",
+        secondary:
+          "bg-secondary hover:bg-purple-500 text-white shadow-lg hover:shadow-glow",
+      };
+
+      return (
+        <button onClick={onClick} className={`${base} ${variants[variant]}`}>
+          {children}
+        </button>
+      );
+    };
 
     const App = () => {
       const [count, setCount] = useState(0);
       const [dark, setDark] = useState(true);
 
       return (
-        <div className={`${dark ? "bg-gray-800 text-white" : "bg-white text-gray-900"} p-8 rounded-2xl shadow-2xl w-96 text-center transition-all duration-300`}>
-          <h1 className="text-2xl font-bold mb-4">React and Tailwind</h1>
-          <p className="mb-6 text-sm opacity-70">directly in the browser</p>
-          <div className="flex justify-center gap-4 mb-6">
-            <button onClick={() => setCount(count + 1)} className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl transition">
-              Click count
-            </button>
-            <button onClick={() => setDark(!dark)} className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-xl transition">
-              Toggle theme
-            </button>
+        <div
+          className={`
+            relative p-8 w-96 text-center rounded-3xl
+            backdrop-blur-xl border border-white/10
+            shadow-2xl transition-all duration-500
+            ${dark
+              ? "bg-white/5 text-white"
+              : "bg-white text-gray-900"}
+          `}
+        >
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary opacity-20 blur-2xl rounded-3xl"></div>
+          <div className="relative z-10">
+            <h1 className="text-3xl font-bold mb-2 tracking-tight">
+              React + Tailwind
+            </h1>
+            <p className="mb-6 text-sm opacity-60">
+              interactive UI with modern patterns
+            </p>
+            <div className="flex justify-center gap-4 mb-6">
+              <Button onClick={() => setCount((c) => c + 1)}>
+                Increment
+              </Button>
+              <Button variant="secondary" onClick={() => setDark((d) => !d)}>
+                Toggle Theme
+              </Button>
+            </div>
+            <div className="mt-4">
+              <p className="text-xs uppercase tracking-widest opacity-50 mb-1">
+                clicks
+              </p>
+              <p className="text-3xl font-bold text-green-400">
+                {count}
+              </p>
+            </div>
           </div>
-          <p className="text-green-400 font-semibold">Clicks: {count}</p>
         </div>
       );
     };
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
-
 </body>
 </html>
