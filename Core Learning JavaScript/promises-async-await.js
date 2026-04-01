@@ -25,12 +25,14 @@ const fetchRecommendations = () => {
   });
 };
 
-const withTimeout = (promise, ms) => {
-  const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), ms));
+const withTimeout = (ms) => (promise) => {
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Timeout")), ms)
+  );
   return Promise.race([promise, timeout]);
 };
 
-const retry = async (fn, attempts = 3) => {
+const withRetry = (attempts = 3) => async (fn) => {
   let lastError;
 
   for (let i = 0; i < attempts; i++) {
@@ -40,29 +42,36 @@ const retry = async (fn, attempts = 3) => {
       lastError = err;
     };
   };
-  return Promise.reject(lastError);
+
+  throw lastError;
+};
+
+const withFallback = (fallbackPromise) => (promise) => {
+  return Promise.any([promise, fallbackPromise]);
+};
+
+const result = async (promise) => {
+  const [result] = await Promise.allSettled([promise]);
+  return result.status === "fulfilled" ? result.value : null;
 };
 
 const search = async () => {
   try {
-    const userPromise = Promise.resolve(fetchUser(1));
-    const postsPromise = userPromise.then((user) => retry(() => fetchPosts(user.id), 2));
-    const recommendationPromise = Promise.any([
-      fetchRecommendations(),
-      new Promise((resolve) =>
-        setTimeout(() => resolve(["Fallback"]), 200)
-      ),
-    ]);
-    const [user, posts] = await Promise.all([
-      withTimeout(userPromise, 1000),
-      withTimeout(postsPromise, 1000),
-    ]);
-    const optionalData = await Promise.allSettled([recommendationPromise]);
-    const recommendations = optionalData[0].status === "fulfilled" ? optionalData[0].value : [];
+    const timeout = withTimeout(1000);
+    const retry = withRetry(2);
+    const userPromise = timeout(fetchUser(1));
+    const postsPromise = userPromise.then((user) =>
+      timeout(retry(() => fetchPosts(user.id)))
+    );
+    const recommendationPromise = withFallback(
+      new Promise((resolve) => setTimeout(() => resolve(["Fallback"]), 200))
+    )(fetchRecommendations());
+    const [user, posts] = await Promise.all([userPromise, postsPromise]);
+    const recommendations = await result(recommendationPromise);
 
-    return { user, posts, recommendations };
+    return {user, posts, recommendations};
   } catch (error) {
-    return Promise.reject({ message: "Search failed", cause: error });
+    throw {message: "Search failed", cause: error};
   };
 };
 
@@ -73,41 +82,3 @@ search()
   .catch((err) => {
     console.error("Error:",err);
   });
-
-/*
-const fetchUser = userId => {
-  return new Promise((resolve) => {
-    console.log("Searching user...");
-
-    setTimeout(() => {
-      resolve({ id: userId, name: "Andy"});
-    }, 1000);
-  });
-};
-
-const fetchPosts = userId => {
-  return new Promise((resolve) => {
-    console.log("Searching posts...");
-
-    setTimeout(() => {
-      resolve(["Post 1", "Post 2", "Post 3"]);
-    }, 1000);
-  });
-};
-
-const search = async () => {
-  try {
-    const [user, posts] = await Promise.all([
-      fetchUser(1),
-      fetchPosts(1),
-    ]);
-
-    console.log("User:", user);
-    console.log("Posts:", posts);
-  } catch (error) {
-    console.error("Error:", error);
-  };
-};
-
-search();
-*/
