@@ -25,6 +25,12 @@ const fetchRecommendations = () => {
   });
 };
 
+/**
+ * Promise.race
+ * takes an iterable of promises and returns a single promise that 
+ * settles (either fulfills or rejects) as soon as the first promise 
+ * in the iterable settles
+ */
 const withTimeout = (ms) => (promise) => {
   const timeout = new Promise((_, reject) =>
     setTimeout(() => reject(new Error("Timeout")), ms)
@@ -32,6 +38,10 @@ const withTimeout = (ms) => (promise) => {
   return Promise.race([promise, timeout]);
 };
 
+/**
+ * Promise.resolve
+ * create a Promise that is already "resolved" with a given value
+ */
 const withRetry = (attempts = 3) => async (fn) => {
   let lastError;
 
@@ -46,15 +56,30 @@ const withRetry = (attempts = 3) => async (fn) => {
   throw lastError;
 };
 
+/**
+ * Promise.any
+ * takes an iterable of promises and returns a single Promise that 
+ * fulfills as soon as any of the input promises fulfills
+ */
 const withFallback = (fallbackPromise) => (promise) => {
   return Promise.any([promise, fallbackPromise]);
 };
 
+/**
+ * Promise.allSettled
+ * takes an iterable of promises and returns a single Promise that 
+ * fulfills after all given promises have either fulfilled or rejected
+ */
 const result = async (promise) => {
   const [result] = await Promise.allSettled([promise]);
   return result.status === "fulfilled" ? result.value : null;
 };
 
+/**
+ * Promise.all:
+ * takes an iterable of promises (usually an array) and returns 
+ * a single promise that coordinates their results
+ */
 const search = async () => {
   try {
     const timeout = withTimeout(1000);
