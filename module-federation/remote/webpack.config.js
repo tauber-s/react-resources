@@ -10,6 +10,20 @@ module.exports = {
   output: {
     publicPath: "auto",
   },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
   plugins: [
     new ModuleFederationPlugin({
       name: "remote",
@@ -18,8 +32,8 @@ module.exports = {
         "./Button": "./src/Button.jsx",
       },
       shared: {
-        react: { singleton: true },
-        "react-dom": { singleton: true },
+        react: { singleton: true, requiredVersion: false },
+        "react-dom": { singleton: true, requiredVersion: false },
       },
     }),
     new HtmlWebpackPlugin({
