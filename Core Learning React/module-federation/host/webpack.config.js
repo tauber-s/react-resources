@@ -27,12 +27,15 @@ module.exports = {
   plugins: [
     new ModuleFederationPlugin({
       name: "host",
+      exposes: {
+        "./GlobalState": "./src/GlobalState",
+      },
       remotes: {
         remote: "remote@http://localhost:3001/remoteEntry.js",
       },
       shared: {
-        react: { singleton: true, requiredVersion: false },
-        "react-dom": { singleton: true, requiredVersion: false },
+        react: { singleton: true, requiredVersion: "^19.0.0" },
+        "react-dom": { singleton: true, requiredVersion: "^19.0.0" },
       },
     }),
     new HtmlWebpackPlugin({

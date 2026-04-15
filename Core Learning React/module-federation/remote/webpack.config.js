@@ -31,9 +31,12 @@ module.exports = {
       exposes: {
         "./Button": "./src/Button.jsx",
       },
+      remotes: {
+        host: "host@http://localhost:3000/remoteEntry.js",
+      },
       shared: {
-        react: { singleton: true, requiredVersion: false },
-        "react-dom": { singleton: true, requiredVersion: false },
+        react: { singleton: true, requiredVersion: "^19.0.0" },
+        "react-dom": { singleton: true, requiredVersion: "^19.0.0" },
       },
     }),
     new HtmlWebpackPlugin({

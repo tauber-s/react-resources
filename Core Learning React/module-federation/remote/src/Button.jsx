@@ -1,5 +1,14 @@
 import React from "react";
 
 export default function Button() {
-  return <button style={{ padding: 10 }}>Remote Button</button>;
-}
+  const handleClick = () => {
+    window.dispatchEvent(
+      new CustomEvent("increment", { detail: 1 })
+    );
+  };
+  return (
+    <button onClick={handleClick}>
+      Increment
+    </button>
+  );
+};
