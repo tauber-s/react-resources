@@ -27,7 +27,6 @@ export default function App() {
   const handleInputChange = (e) => {
     const value = e.target.value;
 
-    // ⚡ simula concurrent rendering
     startTransition(() => {
       setText(value);
     });
