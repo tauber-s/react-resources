@@ -15,3 +15,6 @@
 
 ### Routing | Pagination | Service Workers | Web Components
 ![routing-pagination-serviceworkers-webcomponents](./_screenshots/routing-pagination-serviceworkers-webcomponents.png)
+
+### SWR
+![Screenshot](./_screenshots/swr.png)
