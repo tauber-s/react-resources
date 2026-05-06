@@ -1,0 +1,13 @@
+body {
+  font-family: sans-serif;
+};
+
+ul {
+  max-height: 400px;
+  overflow: auto;
+};
+
+li {
+  padding: 4px;
+  cursor: pointer;
+};
