@@ -44,7 +44,7 @@ export default function App() {
     default:
       ComponentToRender = Item;
   };
-
+  // profiler allow measure the rendering performance
   return (
     <Profiler id="App" onRender={onRender}>
       <div style={{ padding: 20 }}>
