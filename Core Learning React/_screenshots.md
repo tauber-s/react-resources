@@ -18,3 +18,6 @@
 
 ### SWR
 ![Screenshot](./_screenshots/swr.png)
+
+### Local storage | Session storage | Cookies | IndexedDB
+![Screenshot](./_screenshots/local-session-cookie-db.png)
