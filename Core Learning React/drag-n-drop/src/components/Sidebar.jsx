@@ -1,16 +1,58 @@
-export default function Sidebar() {
-  const components = [
-    "Bug",
-    "Feature",
-    "Task",
-  ];
+import { useState } from "react";
 
-  const handleDragStart = (e, type) => {
+export default function Sidebar() {
+  const [components, setComponents] =
+    useState([
+      {
+        id: crypto.randomUUID(),
+        name: "Task",
+      },
+    ]);
+
+  const handleDragStart = (
+    e,
+    component
+  ) => {
     e.dataTransfer.setData(
       "sidebar-item",
       JSON.stringify({
-        type,
+        type: component.name,
       })
+    );
+  };
+
+  const updateComponent = (
+    id,
+    value
+  ) => {
+    setComponents((prev) =>
+      prev.map((component) =>
+        component.id === id
+          ? {
+            ...component,
+            name: value,
+          }
+          : component
+      )
+    );
+  };
+
+  const addComponent = () => {
+    setComponents((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        name: "New Component",
+      },
+    ]);
+  };
+
+  const removeComponent = (id) => {
+    setComponents((prev) =>
+      prev.filter(
+        (component) =>
+          component.id !== id
+      )
     );
   };
 
@@ -18,18 +60,50 @@ export default function Sidebar() {
     <div className="sidebar">
       <h2>Components</h2>
 
-      {components.map((item) => (
+      {components.map((component) => (
         <div
-          key={item}
+          key={component.id}
           className="sidebar-item"
-          draggable
-          onDragStart={(e) =>
-            handleDragStart(e, item)
-          }
         >
-          {item}
+          <span
+            className="drag-handle"
+            draggable
+            onDragStart={(e) =>
+              handleDragStart(e, component)
+            }
+          >
+            ☰
+          </span>
+          <input
+            value={component.name}
+            onChange={(e) =>
+              updateComponent(
+                component.id,
+                e.target.value
+              )
+            }
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          />
+
+          <button
+            className="delete-btn"
+            onClick={() =>
+              removeComponent(component.id)
+            }
+          >
+            ✕
+          </button>
         </div>
       ))}
+
+      <button
+        className="add-button"
+        onClick={addComponent}
+      >
+        Add Component
+      </button>
     </div>
   );
 };

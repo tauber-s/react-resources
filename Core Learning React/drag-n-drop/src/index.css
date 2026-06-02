@@ -26,14 +26,6 @@ body {
   margin-bottom: 20px;
 }
 
-.sidebar-item {
-  background: #1e293b;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  cursor: grab;
-}
-
 .board {
   flex: 1;
   display: flex;
@@ -68,4 +60,59 @@ body {
 
 .card:active {
   cursor: grabbing;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #1e293b;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.drag-handle {
+  cursor: grab;
+  user-select: none;
+  font-size: 20px;
+  color: #94a3b8;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.sidebar-item input {
+  flex: 1;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+  color: white;
+
+  font-size: 14px;
+}
+
+.delete-btn {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.delete-btn:hover {
+  color: white;
+}
+
+.add-button {
+  width: 100%;
+  padding: 10px;
+
+  border: none;
+  border-radius: 8px;
+
+  cursor: pointer;
 }

@@ -78,7 +78,7 @@ export function BoardProvider({ children }) {
   const addCard = (column, type) => {
     const newCard = {
       id: crypto.randomUUID(),
-      title: `${type} Task`,
+      title: type,
     };
 
     setBoard((prev) => ({
@@ -93,7 +93,7 @@ export function BoardProvider({ children }) {
         Loading board...
       </div>
     );
-  }
+  };
 
   return (
     <BoardContext.Provider
@@ -106,6 +106,6 @@ export function BoardProvider({ children }) {
       {children}
     </BoardContext.Provider>
   );
-}
+};
 
 export const useBoard = () => useContext(BoardContext);
