@@ -21,3 +21,10 @@
 
 ### Local storage | Session storage | Cookies | IndexedDB
 ![Screenshot](./_screenshots/local-session-cookie-db.png)
+
+### Drag n Drop
+![Screenshot](./_screenshots/drag-n-drop.png)
+
+### Intersection Observer API
+![Screenshot](./_screenshots/intersection-observer1.png)
+![Screenshot](./_screenshots/intersection-observer2.png)
