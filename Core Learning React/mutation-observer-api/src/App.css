@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #121212;
+  color: white;
+  font-family: Arial;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.cards-container {
+  min-height: 250px;
+  border: 2px solid #444;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.logs {
+  margin-top: 30px;
+}
+
+.log-item {
+  background: #1e1e1e;
+  padding: 10px;
+  margin-top: 6px;
+  border-left: 4px solid #4caf50;
+}
+
+.log-item span {
+  font-size: 12px;
+  color: #999;
+}
