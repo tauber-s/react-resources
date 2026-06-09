@@ -28,3 +28,7 @@
 ### Intersection Observer API
 ![Screenshot](./_screenshots/intersection-observer1.png)
 ![Screenshot](./_screenshots/intersection-observer2.png)
+
+### Mutation Observer API
+![Screenshot](./_screenshots/mutation-observer1.png)
+![Screenshot](./_screenshots/mutation-observer2.png)
