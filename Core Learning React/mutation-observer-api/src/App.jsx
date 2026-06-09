@@ -34,6 +34,10 @@ export default function App() {
                 addLog(`Element removed: ${node.tagName}`);
             });
             break;
+
+          case "attributes":
+            addLog(`Attribute changed: ${mutation.attributeName}`);
+            break;
         }
       });
     });
@@ -41,6 +45,7 @@ export default function App() {
     observer.observe(observedRef.current, {
       childList: true,
       subtree: true,
+      attributes: true,
     });
 
     return () => observer.disconnect();
@@ -64,6 +69,17 @@ export default function App() {
     setItems((prev) => prev.slice(0, -1));
   };
 
+  const randomizeColors = () => {
+    setItems((prev) =>
+      prev.map((item) => ({
+        ...item,
+        color:
+          "#" +
+          Math.floor(Math.random() * 16777215).toString(16),
+      }))
+    );
+  };
+
   return (
     <div className="container">
       <h1>Mutation Observer API</h1>
@@ -74,6 +90,10 @@ export default function App() {
 
         <button onClick={removeCard}>
           Remove Card
+        </button>
+
+        <button onClick={randomizeColors}>
+          Change Attributes
         </button>
       </div>
 
