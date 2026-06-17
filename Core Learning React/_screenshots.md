@@ -32,3 +32,6 @@
 ### Mutation Observer API
 ![Screenshot](./_screenshots/mutation-observer1.png)
 ![Screenshot](./_screenshots/mutation-observer2.png)
+
+### Canvas API
+![Screenshot](./_screenshots/canvas-api.png)
