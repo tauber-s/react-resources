@@ -35,3 +35,7 @@
 
 ### Canvas API
 ![Screenshot](./_screenshots/canvas-api.png)
+
+### Content Security Policy
+![Screenshot](./_screenshots/csp-1.png)
+![Screenshot](./_screenshots/csp-2.png)
